@@ -3,10 +3,10 @@
   "id": "modid",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Visible Toggle Sprint",
+  "description": "I need this",
   "authors": [
-    "Me!"
+    "Ender"
   ],
   "contact": {
     "homepage": "https://fabricmc.net/",
@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.fabricmc.example.ExampleMod"
+      "com.theenercore.visibletogglesprint.VisibleToggleSprint"
     ]
   },
   "mixins": [
