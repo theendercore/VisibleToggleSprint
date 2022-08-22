@@ -28,7 +28,7 @@ public class CrosshairMixin {
             clean = true;
         }
         if (clean && !gameOptions.sprintKey.isPressed()) {
-            client.inGameHud.setOverlayMessage(Text.literal("overlay.visible_toggle_sprint.text.off").formatted(Formatting.RED, Formatting.ITALIC), false);
+            client.inGameHud.setOverlayMessage(Text.translatable("overlay.visible_toggle_sprint.text.off").formatted(Formatting.RED, Formatting.ITALIC), false);
             clean = false;
         }
     }
