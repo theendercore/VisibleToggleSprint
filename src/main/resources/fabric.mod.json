@@ -9,21 +9,21 @@
     "Ender"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
+    "homepage": "https://modrinth.com/mod/visible-toggle-sprint",
     "sources": "https://github.com/theendercore/visible-toggle-sprint"
   },
 
   "license": "CC BY-NC-SA 4.0",
   "icon": "assets/visible_toggle_sprint/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
-    "main": [
+    "client": [
       "com.theendercore.visibletogglesprint.VisibleToggleSprint"
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "visibletogglesprint.mixins.json"
   ],
 
   "depends": {
