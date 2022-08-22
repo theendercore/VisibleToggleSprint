@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "visible_toggle_sprint",
   "version": "${version}",
 
   "name": "Visible Toggle Sprint",
-  "description": "I need this",
+  "description": "A simple mod to make toggle sprint easier!",
   "authors": [
     "Ender"
   ],
@@ -13,13 +13,13 @@
     "sources": "https://github.com/FabricMC/fabric-example-mod"
   },
 
-  "license": "CC0-1.0",
-  "icon": "assets/modid/icon.png",
+  "license": "CC BY-NC-SA 4.0",
+  "icon": "assets/visible_toggle_sprint/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "com.theenercore.visibletogglesprint.VisibleToggleSprint"
+      "com.theendercore.visibletogglesprint.VisibleToggleSprint"
     ]
   },
   "mixins": [
@@ -27,12 +27,12 @@
   ],
 
   "depends": {
-    "fabricloader": ">=0.14.6",
+    "fabricloader": ">=0.14.9",
     "fabric": "*",
-    "minecraft": "~1.19",
+    "minecraft": ">=1.19",
     "java": ">=17"
   },
-  "suggests": {
-    "another-mod": "*"
+  "recommends": {
+    "modmenu": ">=4.0.5"
   }
 }
