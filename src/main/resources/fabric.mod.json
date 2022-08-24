@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "Visible Toggle Sprint",
-  "description": "A simple mod to make toggle sprint easier!",
+  "description": "A simple mod to make toggle sprint & sneak easier!",
   "authors": [
     "Ender"
   ],
@@ -28,7 +28,6 @@
 
   "depends": {
     "fabricloader": ">=0.14.9",
-    "fabric": "*",
     "minecraft": ">=1.19",
     "java": ">=17"
   },
