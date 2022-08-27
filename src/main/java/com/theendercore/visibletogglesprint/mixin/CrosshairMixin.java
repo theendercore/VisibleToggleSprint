@@ -1,6 +1,7 @@
 package com.theendercore.visibletogglesprint.mixin;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import com.theendercore.visibletogglesprint.config.ModConfig;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -26,13 +27,14 @@ public class CrosshairMixin extends DrawableHelper {
 
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
     private void renderCrosshair(MatrixStack matrices, CallbackInfo ci) {
+        ModConfig c = ModConfig.getConfig();
         RenderSystem.setShaderTexture(0, modIcons);
 
-        if (this.client.options.sprintKey.isPressed()) {
-            this.drawTexture(matrices, (this.scaledWidth - 3) / 2 - 4, (this.scaledHeight - 3) / 2 - 4, 0, 0, 4, 4);
+        if (this.client.options.sprintKey.isPressed() && c.getSprintEnabled()) {
+            this.drawTexture(matrices, (this.scaledWidth - 3) / 2 + c.getSprintLocationX(), (this.scaledHeight - 3) / 2 + c.getSprintLocationY(), 0, 0, 4, 4);
         }
-        if (this.client.options.sneakKey.isPressed()) {
-            this.drawTexture(matrices, (this.scaledWidth - 3) / 2 + 3, (this.scaledHeight - 3) / 2 + 3, 4, 0, 4, 4);
+        if (this.client.options.sneakKey.isPressed() && c.getSneakEnabled()) {
+            this.drawTexture(matrices, (this.scaledWidth - 3) / 2 + c.getSneakLocationX(), (this.scaledHeight - 3) / 2 + c.getSneakLocationY(), 4, 0, 4, 4);
         }
         RenderSystem.setShaderTexture(0, Screen.GUI_ICONS_TEXTURE);
     }

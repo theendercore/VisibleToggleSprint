@@ -17,12 +17,16 @@ public class ModConfig {
 
     public static final int DEFAULT_SPRINT_LOCATION = -4;
     public static final int DEFAULT_SNEAK_LOCATION = 3;
+    public static final boolean DEFAULT_SPRINT_ENABLED = true;
+    public static final boolean DEFAULT_SNEAK_ENABLED = true;
     private static ModConfig SINGLE_INSTANCE = null;
     private final File configFile;
     private int sprintLocationX;
     private int sprintLocationY;
     private int sneakLocationX;
     private int sneakLocationY;
+    private boolean sprintEnabled;
+    private boolean sneakEnabled;
 
     public ModConfig() {
         this.configFile = FabricLoader.getInstance().getConfigDir().resolve(MODID + ".json").toFile();
@@ -30,6 +34,8 @@ public class ModConfig {
         this.sprintLocationY = DEFAULT_SPRINT_LOCATION;
         this.sneakLocationX = DEFAULT_SNEAK_LOCATION;
         this.sneakLocationY = DEFAULT_SNEAK_LOCATION;
+        this.sprintEnabled = DEFAULT_SPRINT_ENABLED;
+        this.sneakEnabled = DEFAULT_SNEAK_ENABLED;
 
 
     }
@@ -51,6 +57,8 @@ public class ModConfig {
                 this.sprintLocationY = jsonObject.has("sprintLocationY") ? jsonObject.getAsJsonPrimitive("sprintLocationY").getAsInt() : DEFAULT_SPRINT_LOCATION;
                 this.sneakLocationX = jsonObject.has("sneakLocationX") ? jsonObject.getAsJsonPrimitive("sneakLocationX").getAsInt() : DEFAULT_SNEAK_LOCATION;
                 this.sneakLocationY = jsonObject.has("sneakLocationY") ? jsonObject.getAsJsonPrimitive("sneakLocationY").getAsInt() : DEFAULT_SNEAK_LOCATION;
+                this.sprintEnabled = jsonObject.has("sprintEnabled") ? jsonObject.getAsJsonPrimitive("sprintEnabled").getAsBoolean() : DEFAULT_SPRINT_ENABLED;
+                this.sneakEnabled = jsonObject.has("sneakEnabled") ? jsonObject.getAsJsonPrimitive("sneakEnabled").getAsBoolean() : DEFAULT_SNEAK_ENABLED;
             }
         } catch (IOException e) {
             // Do nothing, we have no file, and thus we have to keep everything as default
@@ -63,6 +71,8 @@ public class ModConfig {
         jsonObject.addProperty("sprintLocationY", this.sprintLocationY);
         jsonObject.addProperty("sneakLocationX", this.sneakLocationX);
         jsonObject.addProperty("sneakLocationY", this.sneakLocationY);
+        jsonObject.addProperty("sprintEnabled", this.sprintEnabled);
+        jsonObject.addProperty("sneakEnabled", this.sneakEnabled);
 
         try (PrintWriter out = new PrintWriter(configFile)) {
             out.println(jsonObject);
@@ -91,11 +101,14 @@ public class ModConfig {
         this.sneakLocationX = sneakLocationX;
     }
 
-    public int getSneakLocationY() {
-        return sneakLocationY;
-    }
+    public int getSneakLocationY() { return sneakLocationY; }
     public void setSneakLocationY(int sneakLocationY) {
         this.sneakLocationY = sneakLocationY;
     }
 
+    public boolean getSprintEnabled() {return sprintEnabled;}
+    public void setSprintEnabled(boolean sprintEnabled) {this.sprintEnabled = sprintEnabled;}
+
+    public boolean getSneakEnabled() { return sneakEnabled; }
+    public void setSneakEnabled(boolean sneakEnabled) {this.sneakEnabled = sneakEnabled;}
 }

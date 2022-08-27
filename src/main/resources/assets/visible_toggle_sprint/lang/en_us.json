@@ -1,0 +1,12 @@
+{
+  "config.visible_toggle_sprint.category.customization": "Customization",
+
+
+  "config.visible_toggle_sprint.customization.sprint_enable": "Enable Sprint Icon ",
+  "config.visible_toggle_sprint.customization.sprint_location_x": "Sprint X Location ",
+  "config.visible_toggle_sprint.customization.sprint_location_y": "Sprint Y Location ",
+
+  "config.visible_toggle_sprint.customization.sneak_enable": "Enable Sneak Icon ",
+  "config.visible_toggle_sprint.customization.sneak_location_x": "Sneak X Location ",
+  "config.visible_toggle_sprint.customization.sneak_location_y": "Sneak Y Location "
+}

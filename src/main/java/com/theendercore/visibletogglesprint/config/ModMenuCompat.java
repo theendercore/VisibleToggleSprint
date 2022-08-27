@@ -27,6 +27,11 @@ public class ModMenuCompat implements ModMenuApi {
             ConfigCategory customizationCategory = builder.getOrCreateCategory(Text.translatable("config."+MODID+".category.customization"));
 
             customizationCategory.addEntry(entryBuilder
+                    .startBooleanToggle(Text.translatable("config."+MODID+".customization.sprint_enable"), config.getSprintEnabled())
+                    .setSaveConsumer((config::setSprintEnabled))
+                    .setDefaultValue(ModConfig.DEFAULT_SPRINT_ENABLED)
+                    .build());
+            customizationCategory.addEntry(entryBuilder
                     .startIntField(Text.translatable("config."+MODID+".customization.sprint_location_x"), config.getSprintLocationX())
                     .setSaveConsumer((config::setSprintLocationX))
                     .setDefaultValue(ModConfig.DEFAULT_SPRINT_LOCATION)
@@ -35,6 +40,11 @@ public class ModMenuCompat implements ModMenuApi {
                     .startIntField(Text.translatable("config."+MODID+".customization.sprint_location_y"), config.getSprintLocationY())
                     .setSaveConsumer((config::setSprintLocationY))
                     .setDefaultValue(ModConfig.DEFAULT_SPRINT_LOCATION)
+                    .build());
+            customizationCategory.addEntry(entryBuilder
+                    .startBooleanToggle(Text.translatable("config."+MODID+".customization.sneak_enable"), config.getSneakEnabled())
+                    .setSaveConsumer((config::setSneakEnabled))
+                    .setDefaultValue(ModConfig.DEFAULT_SNEAK_ENABLED)
                     .build());
             customizationCategory.addEntry(entryBuilder
                     .startIntField(Text.translatable("config."+MODID+".customization.sneak_location_x"), config.getSneakLocationX())

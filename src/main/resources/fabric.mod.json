@@ -20,6 +20,9 @@
   "entrypoints": {
     "client": [
       "com.theendercore.visibletogglesprint.VisibleToggleSprint"
+    ],
+    "modmenu": [
+      "com.theendercore.visibletogglesprint.config.ModMenuCompat"
     ]
   },
   "mixins": [
@@ -32,6 +35,6 @@
     "java": ">=17"
   },
   "recommends": {
-    "modmenu": ">=4.0.5"
+    "modmenu": ">=4.0.4"
   }
 }
