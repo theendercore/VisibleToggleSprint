@@ -12,14 +12,14 @@ import java.nio.file.Files;
 
 import static com.theendercore.visibletogglesprint.VisibleToggleSprint.MODID;
 
-public class ModConfig {
+public class ModConfigOld {
 
 
-    public static final int DEFAULT_SPRINT_LOCATION = -4;
-    public static final int DEFAULT_SNEAK_LOCATION = 3;
+    public static final int DEFAULT_SPRINT_LOCATION = -6;
+    public static final int DEFAULT_SNEAK_LOCATION = 1;
     public static final boolean DEFAULT_SPRINT_ENABLED = true;
     public static final boolean DEFAULT_SNEAK_ENABLED = true;
-    private static ModConfig SINGLE_INSTANCE = null;
+    private static ModConfigOld SINGLE_INSTANCE = null;
     private final File configFile;
     private int sprintLocationX;
     private int sprintLocationY;
@@ -28,7 +28,7 @@ public class ModConfig {
     private boolean sprintEnabled;
     private boolean sneakEnabled;
 
-    public ModConfig() {
+    public ModConfigOld() {
         this.configFile = FabricLoader.getInstance().getConfigDir().resolve(MODID + ".json").toFile();
         this.sprintLocationX = DEFAULT_SPRINT_LOCATION;
         this.sprintLocationY = DEFAULT_SPRINT_LOCATION;
@@ -40,9 +40,9 @@ public class ModConfig {
 
     }
 
-    public static ModConfig getConfig() {
+    public static ModConfigOld getConfig() {
         if (SINGLE_INSTANCE == null) {
-            SINGLE_INSTANCE = new ModConfig();
+            SINGLE_INSTANCE = new ModConfigOld();
         }
 
         return SINGLE_INSTANCE;

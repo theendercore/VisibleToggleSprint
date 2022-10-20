@@ -1,6 +1,7 @@
 package com.theendercore.visibletogglesprint;
 
-import com.theendercore.visibletogglesprint.config.ModConfig;
+import com.theendercore.visibletogglesprint.config.VTSConfig;
+import com.theendercore.visibletogglesprint.config.ModConfigOld;
 import net.fabricmc.api.ClientModInitializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,11 @@ public class VisibleToggleSprint implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
-		ModConfig.getConfig().load();
+		ModConfigOld.getConfig().load();
+		getConfig().load();
 		LOGGER.info("I am my planting roots.");
+	}
+	public static VTSConfig getConfig() {
+		return VTSConfig.INSTANCE;
 	}
 }
