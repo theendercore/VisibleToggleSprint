@@ -1,12 +1,15 @@
 {
-  "config.visible_toggle_sprint.category.customization": "Customization",
+  "config.visible_toggle_sprint.title": "Visual Toggle Sprint",
 
 
-  "config.visible_toggle_sprint.customization.sprint_enable": "Enable Sprint Icon ",
-  "config.visible_toggle_sprint.customization.sprint_location_x": "Sprint X Location ",
-  "config.visible_toggle_sprint.customization.sprint_location_y": "Sprint Y Location ",
+  "config.visible_toggle_sprint.sprint.tab": "Sprint",
+  "config.visible_toggle_sprint.sprint.enable": "Enable Sprint",
+  "config.visible_toggle_sprint.sprint.location.x": "Sprint X Location ",
+  "config.visible_toggle_sprint.sprint.location.y": "Sprint Y Location ",
 
-  "config.visible_toggle_sprint.customization.sneak_enable": "Enable Sneak Icon ",
-  "config.visible_toggle_sprint.customization.sneak_location_x": "Sneak X Location ",
-  "config.visible_toggle_sprint.customization.sneak_location_y": "Sneak Y Location "
+
+  "config.visible_toggle_sprint.sneak.tab": "Sneak",
+  "config.visible_toggle_sprint.sneak.enable": "Enable Sneak",
+  "config.visible_toggle_sprint.sneak.location.x": "Sneak X Location ",
+  "config.visible_toggle_sprint.sneak.location.y": "Sneak Y Location "
 }
