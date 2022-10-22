@@ -31,12 +31,12 @@ public abstract class CrosshairMixin extends DrawableHelper {
         VisibleToggleSprintConfig c = getConfig();
         RenderSystem.setShaderTexture(0, modIcons);
 
-        if (this.client.options.sprintKey.isPressed() && c.sprint) {
-            this.drawTexture(matrices, (this.scaledWidth) / 2 + c.sprintLocation.x, (this.scaledHeight) / 2 + c.sprintLocation.x, 0, 0, 4, 4);
+        if (this.client.options.sprintKey.isPressed() && c.crosshairSprint) {
+            this.drawTexture(matrices, (this.scaledWidth) / 2 + c.crosshairSprintLocation.x, (this.scaledHeight) / 2 + c.crosshairSprintLocation.x, c.crosshairSprintIcon.x, 0, 4, 4);
         }
         RenderSystem.setShaderTexture(0, modIcons);
-        if (this.client.options.sneakKey.isPressed() && c.sneak) {
-            this.drawTexture(matrices, (this.scaledWidth) / 2 + c.sneakLocation.x, (this.scaledHeight) / 2 + c.sneakLocation.y, 4, 0, 4, 4);
+        if (this.client.options.sneakKey.isPressed() && c.crosshairSneak) {
+            this.drawTexture(matrices, (this.scaledWidth) / 2 + c.crosshairSneakLocation.x, (this.scaledHeight) / 2 + c.crosshairSneakLocation.y, c.crosshairSneakIcon.x, 4, 4, 4);
         }
         RenderSystem.setShaderTexture(0, Screen.GUI_ICONS_TEXTURE);
     }
