@@ -31,8 +31,9 @@
 
   "depends": {
     "fabricloader": ">=0.14.9",
-    "minecraft": ">=1.19",
-    "java": ">=17"
+    "minecraft": ">=1.19.1",
+    "java": ">=17",
+    "yet-another-config-lib": ">=1.5.0"
   },
   "recommends": {
     "modmenu": ">=4.0.4"

@@ -6,15 +6,17 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class VisibleToggleSprint implements ClientModInitializer {
-	public static final String MODID = "visible_toggle_sprint";
-	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
+    public static final String MODID = "visible_toggle_sprint";
+    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
+    public static final int ConfigVersion = 2;
 
-	@Override
-	public void onInitializeClient() {
-		getConfig().load();
-		LOGGER.info("I am my planting roots.");
-	}
-	public static VisibleToggleSprintConfig getConfig() {
-		return VisibleToggleSprintConfig.INSTANCE;
-	}
+    public static VisibleToggleSprintConfig getConfig() {
+        return VisibleToggleSprintConfig.INSTANCE;
+    }
+
+    @Override
+    public void onInitializeClient() {
+        getConfig().load();
+        LOGGER.info("I am my planting roots.");
+    }
 }

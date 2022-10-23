@@ -3,44 +3,41 @@ package com.theendercore.visibletogglesprint.config;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
-import com.theendercore.visibletogglesprint.lib.Vec2i;
+import com.theendercore.visibletogglesprint.lib.*;
 import dev.isxander.yacl.api.*;
 import dev.isxander.yacl.gui.controllers.BooleanController;
+import dev.isxander.yacl.gui.controllers.ColorController;
 import dev.isxander.yacl.gui.controllers.EnumController;
 import dev.isxander.yacl.gui.controllers.slider.IntegerSliderController;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 
+import java.awt.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
-import static com.theendercore.visibletogglesprint.VisibleToggleSprint.MODID;
+import static com.theendercore.visibletogglesprint.VisibleToggleSprint.*;
 
 public class VisibleToggleSprintConfig {
+
     public static final VisibleToggleSprintConfig INSTANCE = new VisibleToggleSprintConfig();
     public final Path configFile = FabricLoader.getInstance().getConfigDir().resolve("visible_toggle_sprint.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-    public boolean crosshairSprint = true;
-    public Vec2i crosshairSprintLocation = new Vec2i(-6,-6);
-    public CrosshairIcons crosshairSprintIcon = CrosshairIcons.DEFAULT;
-    public boolean crosshairSneak = true;
-    public Vec2i crosshairSneakLocation = new Vec2i(1,1);
-    public CrosshairIcons crosshairSneakIcon = CrosshairIcons.DEFAULT;
+    public PlayerState sprint =  new PlayerState(true, new Vec2i(-6,-6), CrosshairIcons.DEFAULT, false,false, new Vec2i(10, 10), -1);
+    public PlayerState sneak =  new PlayerState(true, new Vec2i(1,1), CrosshairIcons.DEFAULT, false, false, new Vec2i(10, 30), -1);
     public void save() {
         try {
             Files.deleteIfExists(configFile);
+
             JsonObject j = new JsonObject();
-            j.addProperty("crosshair.sprint", crosshairSprint);
-            j.add("crosshair.sprint.location", crosshairSprintLocation.toJSON());
-            j.addProperty("crosshair.sprint.icon", crosshairSprintIcon.name);
-            j.addProperty("crosshair.sneak", crosshairSneak);
-            j.add("crosshair.sneak.location", crosshairSneakLocation.toJSON());
-            j.addProperty("crosshair.sneak.icon", crosshairSneakIcon.name);
+            Gson gson = new Gson();
+
+            j.addProperty("Version", ConfigVersion);
+            j.add("sprint", gson.toJsonTree(sprint));
+            j.add("sneak", gson.toJsonTree(sneak));
 
             Files.writeString(configFile, gson.toJson(j));
         } catch (IOException e) {
@@ -57,18 +54,11 @@ public class VisibleToggleSprintConfig {
 
             JsonObject json = gson.fromJson(Files.readString(configFile), JsonObject.class);
 
-            if (json.has("crosshair.sprint")) crosshairSprint = json.getAsJsonPrimitive("crosshair.sprint").getAsBoolean();
-            if (json.has("crosshair.sprint.location")) {
-                crosshairSprintLocation.x = json.getAsJsonObject("crosshair.sprint.location").getAsJsonPrimitive("x").getAsInt();
-                crosshairSprintLocation.y = json.getAsJsonObject("crosshair.sprint.location").getAsJsonPrimitive("y").getAsInt();
+            if (json.getAsJsonPrimitive("Version") != null && json.getAsJsonPrimitive("Version").getAsInt() == ConfigVersion) {
+                if (json.has("sprint")) sprint = gson.fromJson(json.getAsJsonObject("sprint"), PlayerState.class);
+                if (json.has("sneak")) sneak = gson.fromJson(json.getAsJsonObject("sneak"), PlayerState.class);
             }
-            if(json.has("crosshair.sprint.icon"))  crosshairSprintIcon = CrosshairIcons.valueOf((json.getAsJsonPrimitive("crosshair.sprint.icon").getAsString()));
-            if (json.has("crosshair.sneak")) crosshairSneak = json.getAsJsonPrimitive("crosshair.sneak").getAsBoolean();
-            if (json.has("crosshair.sneak.location")) {
-                crosshairSneakLocation.x = json.getAsJsonObject("crosshair.sneak.location").getAsJsonPrimitive("x").getAsInt();
-                crosshairSneakLocation.y = json.getAsJsonObject("crosshair.sneak.location").getAsJsonPrimitive("y").getAsInt();
-            }
-            if(json.has("crosshair.sneak.icon"))  crosshairSneakIcon = CrosshairIcons.valueOf((json.getAsJsonPrimitive("crosshair.sneak.icon").getAsString()));
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -80,107 +70,210 @@ public class VisibleToggleSprintConfig {
                 .category(ConfigCategory.createBuilder()
                         .name(Text.translatable("config."+MODID+".sprint.tab"))
                         .group(OptionGroup.createBuilder()
-                            .name(Text.translatable("config."+MODID+".sprint.group.crosshair"))
+                            .name(Text.translatable("config."+MODID+".group.crosshair"))
                             .options(List.of(
                                     Option.createBuilder(boolean.class)
-                                    .name(Text.translatable("config."+MODID+".sprint.crosshair.enable"))
+                                    .name(Text.translatable("config."+MODID+".enable"))
                                     .binding(
                                             true,
-                                            () -> crosshairSprint,
-                                            value -> crosshairSprint = value
+                                            () -> sprint.crosshair.enable,
+                                            value -> sprint.crosshair.enable = value
                                     )
                                     .controller(BooleanController::new)
                                     .build(),
 
                                 Option.createBuilder(int.class)
-                                    .name(Text.translatable("config."+MODID+".sprint.crosshair.location.x"))
+                                    .name(Text.translatable("config."+MODID+".location.x"))
                                     .binding(
                                             -6,
-                                            () -> crosshairSprintLocation.x,
-                                            value -> crosshairSprintLocation.x = value
+                                            () -> sprint.crosshair.location.x,
+                                            value -> sprint.crosshair.location.x = value
                                     )
                                     .controller(yacl -> new IntegerSliderController(yacl, -32, 32, 1))
                                     .build(),
 
                                 Option.createBuilder(int.class)
-                                    .name(Text.translatable("config."+MODID+".sprint.crosshair.location.y"))
+                                    .name(Text.translatable("config."+MODID+".location.y"))
                                     .binding(
                                             -6,
-                                            () -> crosshairSprintLocation.y,
-                                            value -> crosshairSprintLocation.y = value
+                                            () -> sprint.crosshair.location.y,
+                                            value -> sprint.crosshair.location.y = value
                                     )
                                     .controller(yacl -> new IntegerSliderController(yacl, -32, 32, 1))
                                     .build(),
                                 Option.createBuilder(CrosshairIcons.class)
-                                    .name(Text.translatable("config."+MODID+".sprint.crosshair.icon"))
+                                    .name(Text.translatable("config."+MODID+".icon"))
                                     .binding(
                                             CrosshairIcons.DEFAULT,
-                                            () -> this.crosshairSprintIcon,
-                                            newValue -> this.crosshairSprintIcon = newValue
+                                            () -> sprint.crosshair.icon,
+                                            newValue -> sprint.crosshair.icon = newValue
                                     )
                                     .controller(EnumController::new)
                                     .build()
                                     )
                             ).build())
+                        .group(OptionGroup.createBuilder()
+                                .name(Text.translatable("config."+MODID+".group.hotbar"))
+                                .option(Option.createBuilder(boolean.class)
+                                                .name(Text.translatable("config."+MODID+".enable"))
+                                                .binding(
+                                                        false,
+                                                        () -> sprint.hotbarEnabled,
+                                                        value -> sprint.hotbarEnabled = value
+                                                )
+                                                .controller(BooleanController::new)
+                                                .build()
+                                )
+                                .build())
+                        .group(OptionGroup.createBuilder()
+                                .name(Text.translatable("config."+MODID+".group.text")) //TEXT -------------------------------------------------------------------
+                                .options(
+                                        List.of(
+                                                Option.createBuilder(boolean.class)
+                                                        .name(Text.translatable("config."+MODID+".enable"))
+                                                        .binding(
+                                                                false,
+                                                                () -> sprint.text.enable,
+                                                                value -> sprint.text.enable = value
+                                                        )
+                                                        .controller(BooleanController::new)
+                                                        .build(),
+                                                Option.createBuilder(int.class)
+                                                        .name(Text.translatable("config."+MODID+".location.x"))
+                                                        .binding(
+                                                                10,
+                                                                () -> sprint.text.location.x,
+                                                                value -> sprint.text.location.x = value
+                                                        )
+                                                        .controller(yacl -> new IntegerSliderController(yacl, 0, 1920, 10))
+                                                        .build(),
+
+                                                Option.createBuilder(int.class)
+                                                        .name(Text.translatable("config."+MODID+".location.y"))
+                                                        .binding(
+                                                                10,
+                                                                () -> sprint.text.location.y,
+                                                                value -> sprint.text.location.y = value
+                                                        )
+                                                        .controller(yacl -> new IntegerSliderController(yacl, 0, 1080, 10))
+                                                        .build(),
+                                                Option.createBuilder(Color.class)
+                                                        .name(Text.translatable("config."+MODID+".color"))
+                                                        .binding(
+                                                                Color.WHITE,
+                                                                () -> new Color(sprint.text.color),
+                                                                value -> sprint.text.color = value.getRGB()
+                                                        )
+                                                        .controller(ColorController::new)
+                                                        .build()
+                                        )
+                                )
+                                .build())
                     .build()
                 )
                 .category(ConfigCategory.createBuilder()
                         .name(Text.translatable("config."+MODID+".sneak.tab"))
                         .group(OptionGroup.createBuilder()
-                            .name(Text.translatable("config."+MODID+".sneak.group.crosshair"))
+                            .name(Text.translatable("config."+MODID+".group.crosshair"))
                                 .options(List.of(
                             Option.createBuilder(boolean.class)
-                                    .name(Text.translatable("config."+MODID+".sneak.crosshair.enable"))
+                                    .name(Text.translatable("config."+MODID+".enable"))
                                     .binding(
                                             true,
-                                            () -> crosshairSneak,
-                                            value -> crosshairSneak = value
+                                            () -> sneak.crosshair.enable,
+                                            value -> sneak.crosshair.enable = value
                                     )
                                     .controller(BooleanController::new)
                                     .build(),
                            Option.createBuilder(int.class)
-                                    .name(Text.translatable("config."+MODID+".sneak.crosshair.location.x"))
+                                    .name(Text.translatable("config."+MODID+".location.x"))
                                     .binding(
                                             1,
-                                            () -> crosshairSneakLocation.x,
-                                            value -> crosshairSneakLocation.x = value
+                                            () -> sneak.crosshair.location.x,
+                                            value -> sneak.crosshair.location.x = value
                                     )
                                     .controller(yacl -> new IntegerSliderController(yacl, -32, 32, 1))
                                     .build(),
                             Option.createBuilder(int.class)
-                                    .name(Text.translatable("config."+MODID+".sneak.crosshair.location.y"))
+                                    .name(Text.translatable("config."+MODID+".location.y"))
                                     .binding(
                                             1,
-                                            () -> crosshairSneakLocation.y,
-                                            value -> crosshairSneakLocation.y = value
+                                            () -> sneak.crosshair.location.y,
+                                            value -> sneak.crosshair.location.y = value
                                     )
                                     .controller(yacl -> new IntegerSliderController(yacl, -32, 32, 1))
                                     .build(),
                             Option.createBuilder(CrosshairIcons.class)
-                                    .name(Text.translatable("config."+MODID+".sneak.crosshair.icon"))
+                                    .name(Text.translatable("config."+MODID+".icon"))
                                     .binding(
                                             CrosshairIcons.DEFAULT,
-                                            () -> this.crosshairSneakIcon,
-                                            newValue -> this.crosshairSneakIcon = newValue
+                                            () -> sneak.crosshair.icon,
+                                            newValue -> sneak.crosshair.icon = newValue
                                     )
                                     .controller(EnumController::new)
                                     .build()
                                 ))
                             .build())
+                        .group(OptionGroup.createBuilder()
+                                .name(Text.translatable("config."+MODID+".group.hotbar"))
+                                .option(Option.createBuilder(boolean.class)
+                                        .name(Text.translatable("config."+MODID+".enable"))
+                                        .binding(
+                                                false,
+                                                () -> sneak.hotbarEnabled,
+                                                value -> sneak.hotbarEnabled = value
+                                        )
+                                        .controller(BooleanController::new)
+                                        .build()
+                                )
+                                .build())
+                        .group(OptionGroup.createBuilder()
+                                .name(Text.translatable("config."+MODID+".group.text")) //TEXT -------------------------------------------------------------------
+                                .options(
+                                        List.of(
+                                            Option.createBuilder(boolean.class)
+                                                    .name(Text.translatable("config."+MODID+".enable"))
+                                                    .binding(
+                                                            false,
+                                                            () -> sneak.text.enable,
+                                                            value -> sneak.text.enable = value
+                                                    )
+                                                    .controller(BooleanController::new)
+                                                    .build(),
+                                            Option.createBuilder(int.class)
+                                                    .name(Text.translatable("config."+MODID+".location.x"))
+                                                    .binding(
+                                                            10,
+                                                            () -> sneak.text.location.x,
+                                                            value -> sneak.text.location.x = value
+                                                    )
+                                                    .controller(yacl -> new IntegerSliderController(yacl, 0, 1920, 10))
+                                                    .build(),
+
+                                            Option.createBuilder(int.class)
+                                                    .name(Text.translatable("config."+MODID+".location.y"))
+                                                    .binding(
+                                                            20,
+                                                            () -> sneak.text.location.y,
+                                                            value -> sneak.text.location.y = value
+                                                    )
+                                                    .controller(yacl -> new IntegerSliderController(yacl, 0, 1080, 10))
+                                                    .build(),
+                                                Option.createBuilder(Color.class)
+                                                        .name(Text.translatable("config."+MODID+".color"))
+                                                        .binding(
+                                                                Color.WHITE,
+                                                                () -> new Color(sneak.text.color),
+                                                                value -> sneak.text.color = value.getRGB()
+                                                        )
+                                                        .controller(ColorController::new)
+                                                        .build()
+                                        )
+                                )
+                                .build())
                         .build())
                 .save(this::save)
                 .build()
                 .generateScreen(parent);
-    }
-
-    public enum CrosshairIcons{
-        DEFAULT( 0, "DEFAULT"),
-        MINIMAL_ONE(4,"MINIMAL_ONE") ,
-        MINIMAL_TWO(8, "MINIMAL_TWO"),
-        MINIMAL_THREE(12, "MINIMAL_THREE");
-        public final int x;
-        private final String name;
-
-        CrosshairIcons(int x, String name){ this.x = x; this.name = name;};
     }
 }

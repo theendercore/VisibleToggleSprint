@@ -1,19 +1,16 @@
 {
   "config.visible_toggle_sprint.title": "Visual Toggle Sprint",
 
-
   "config.visible_toggle_sprint.sprint.tab": "Sprint",
-  "config.visible_toggle_sprint.sprint.group.crosshair": "Crosshair",
-  "config.visible_toggle_sprint.sprint.crosshair.enable": "Enable Sprint",
-  "config.visible_toggle_sprint.sprint.crosshair.location.x": "X Location",
-  "config.visible_toggle_sprint.sprint.crosshair.location.y": "Y Location",
-  "config.visible_toggle_sprint.sprint.crosshair.icon": "Icon",
-
-
   "config.visible_toggle_sprint.sneak.tab": "Sneak",
-  "config.visible_toggle_sprint.sneak.group.crosshair": "Crosshair",
-  "config.visible_toggle_sprint.sneak.crosshair.enable": "Enable Sneak",
-  "config.visible_toggle_sprint.sneak.crosshair.location.x": "X Location",
-  "config.visible_toggle_sprint.sneak.crosshair.location.y": "Y Location",
-  "config.visible_toggle_sprint.sneak.crosshair.icon": "Icon"
+
+  "config.visible_toggle_sprint.group.crosshair": "Crosshair",
+  "config.visible_toggle_sprint.group.hotbar": "Hotbar",
+  "config.visible_toggle_sprint.group.text": "Text",
+
+  "config.visible_toggle_sprint.enable": "Enable",
+  "config.visible_toggle_sprint.location.x": "X Location",
+  "config.visible_toggle_sprint.location.y": "Y Location",
+  "config.visible_toggle_sprint.icon": "Icon",
+  "config.visible_toggle_sprint.color": "Color"
 }
