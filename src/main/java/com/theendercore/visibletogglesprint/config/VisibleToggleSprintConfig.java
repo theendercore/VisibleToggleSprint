@@ -33,7 +33,9 @@ public class VisibleToggleSprintConfig {
             Files.deleteIfExists(configFile);
 
             JsonObject j = new JsonObject();
-            Gson gson = new Gson();
+            Gson gson = new GsonBuilder()
+                    .setPrettyPrinting()
+                    .create();
 
             j.addProperty("Version", ConfigVersion);
             j.add("sprint", gson.toJsonTree(sprint));

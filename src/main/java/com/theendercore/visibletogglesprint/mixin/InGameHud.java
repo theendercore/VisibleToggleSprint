@@ -7,6 +7,7 @@ import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.text.Text;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.BooleanUtils;
@@ -39,7 +40,7 @@ public abstract class InGameHud extends DrawableHelper {
         RenderSystem.setShaderTexture(0, modIcons);
 
         if (this.client.options.sprintKey.isPressed() && sprint.crosshair.enable) {
-            this.drawTexture(matrices, (this.scaledWidth) / 2 + sprint.crosshair.location.x, (this.scaledHeight) / 2 + sprint.crosshair.location.x, sprint.crosshair.icon.x, 0, 4, 4);
+            this.drawTexture(matrices, (this.scaledWidth) / 2 + sprint.crosshair.location.x, (this.scaledHeight) / 2 + sprint.crosshair.location.y, sprint.crosshair.icon.x, 0, 4, 4);
         }
         RenderSystem.setShaderTexture(0, modIcons);
         if (this.client.options.sneakKey.isPressed() && sneak.crosshair.enable) {
@@ -75,10 +76,10 @@ public abstract class InGameHud extends DrawableHelper {
     @Inject(method = "renderAutosaveIndicator", at = @At("TAIL"))
     private void renderAutosaveIndicator(MatrixStack matrices, CallbackInfo ci) {
         if (this.client.options.sprintKey.isPressed() && sprint.text.enable ) {
-            this.client.textRenderer.drawWithShadow(matrices, "Sprinting", sprint.text.location.x, sprint.text.location.y, sprint.text.color);
+            this.client.textRenderer.drawWithShadow(matrices, Text.translatable("hud.visible_toggle_sprint.sprint"), sprint.text.location.x, sprint.text.location.y, sprint.text.color);
         }
         if (this.client.options.sneakKey.isPressed() && sneak.text.enable) {
-            this.client.textRenderer.drawWithShadow(matrices, "Sneaking", sneak.text.location.x, sneak.text.location.y, sneak.text.color);
+            this.client.textRenderer.drawWithShadow(matrices, Text.translatable("hud.visible_toggle_sprint.sneak"), sneak.text.location.x, sneak.text.location.y, sneak.text.color);
         }
 
     }

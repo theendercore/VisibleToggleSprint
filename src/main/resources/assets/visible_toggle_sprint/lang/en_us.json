@@ -12,5 +12,8 @@
   "config.visible_toggle_sprint.location.x": "X Location",
   "config.visible_toggle_sprint.location.y": "Y Location",
   "config.visible_toggle_sprint.icon": "Icon",
-  "config.visible_toggle_sprint.color": "Color"
+  "config.visible_toggle_sprint.color": "Color",
+
+  "hud.visible_toggle_sprint.sprint": "Sprinting",
+  "hud.visible_toggle_sprint.sneak": "Sneaking"
 }
