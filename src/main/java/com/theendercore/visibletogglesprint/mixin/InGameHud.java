@@ -52,22 +52,24 @@ public abstract class InGameHud extends DrawableHelper {
     @Inject(method = "renderHotbar", at = @At("TAIL"))
     private void renderHotbar(float tickDelta, MatrixStack matrices, CallbackInfo ci) {
         assert this.getCameraPlayer() != null;
-        Arm arm = this.getCameraPlayer().getMainArm().getOpposite();
+        PlayerEntity pl = this.getCameraPlayer();
+        Arm arm = pl.getMainArm().getOpposite();
+        int k = 28 * BooleanUtils.toInteger(!pl.getOffHandStack().isEmpty());
         RenderSystem.setShaderTexture(0, modIcons);
 
         if (this.client.options.sprintKey.isPressed() && sprint.hotbarEnabled) {
-            int x = (this.scaledWidth) / 2 - 113;
+            int x = (this.scaledWidth) / 2 - 113 -k;
             if (arm == Arm.RIGHT) {
-                x = (this.scaledWidth) / 2 + 97;
+                x = (this.scaledWidth) / 2 + 97 + k;
             }
             this.drawTexture(matrices, x, (this.scaledHeight) - 18, 0, 16, 16, 16);
 
         }
         if (this.client.options.sneakKey.isPressed() && sneak.hotbarEnabled) {
             int l = 22 * BooleanUtils.toInteger(this.client.options.sprintKey.isPressed() && sprint.hotbarEnabled);
-            int x = (this.scaledWidth) / 2 - 113 - l;
+            int x = (this.scaledWidth) / 2 - 113 - l - k;
             if (arm == Arm.RIGHT) {
-                x = (this.scaledWidth) / 2 + 97 + l;
+                x = (this.scaledWidth) / 2 + 97 + l + k;
             }
             this.drawTexture(matrices, x, (this.scaledHeight) - 18, 16, 16, 16, 16);
         }
@@ -75,7 +77,7 @@ public abstract class InGameHud extends DrawableHelper {
 
     @Inject(method = "renderAutosaveIndicator", at = @At("TAIL"))
     private void renderAutosaveIndicator(MatrixStack matrices, CallbackInfo ci) {
-        if (this.client.options.sprintKey.isPressed() && sprint.text.enable ) {
+        if (this.client.options.sprintKey.isPressed() && sprint.text.enable) {
             this.client.textRenderer.drawWithShadow(matrices, Text.translatable("hud.visible_toggle_sprint.sprint"), sprint.text.location.x, sprint.text.location.y, sprint.text.color);
         }
         if (this.client.options.sneakKey.isPressed() && sneak.text.enable) {
