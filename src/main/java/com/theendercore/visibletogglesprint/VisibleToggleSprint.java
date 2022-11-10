@@ -13,7 +13,6 @@ public class VisibleToggleSprint implements ClientModInitializer {
     public static VisibleToggleSprintConfig getConfig() {
         return VisibleToggleSprintConfig.INSTANCE;
     }
-
     @Override
     public void onInitializeClient() {
         getConfig().load();

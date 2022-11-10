@@ -5,11 +5,14 @@ import com.theendercore.visibletogglesprint.lib.PlayerState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
 import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.hit.HitResult;
+import net.minecraft.world.GameMode;
 import org.apache.commons.lang3.BooleanUtils;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
@@ -38,27 +41,38 @@ public abstract class InGameHud extends DrawableHelper {
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
     private void renderCrosshair(MatrixStack matrices, CallbackInfo ci) {
         RenderSystem.setShaderTexture(0, modIcons);
-
-        if (this.client.options.sprintKey.isPressed() && sprint.crosshair.enable) {
-            this.drawTexture(matrices, (this.scaledWidth) / 2 + sprint.crosshair.location.x, (this.scaledHeight) / 2 + sprint.crosshair.location.y, sprint.crosshair.icon.x, 0, 4, 4);
-        }
-        RenderSystem.setShaderTexture(0, modIcons);
-        if (this.client.options.sneakKey.isPressed() && sneak.crosshair.enable) {
-            this.drawTexture(matrices, (this.scaledWidth) / 2 + sneak.crosshair.location.x, (this.scaledHeight) / 2 + sneak.crosshair.location.y, sneak.crosshair.icon.x, 4, 4, 4);
+        GameOptions gameOptions = this.client.options;
+        if (!gameOptions.debugEnabled && gameOptions.getPerspective().isFirstPerson()) {
+            assert this.client.interactionManager != null;
+            if (this.client.interactionManager.getCurrentGameMode() != GameMode.SPECTATOR || this.shouldRenderSpectatorCrosshair(this.client.crosshairTarget)) {
+                if (this.client.options.sprintKey.isPressed() && sprint.crosshair.enable) {
+                    this.drawTexture(matrices, (this.scaledWidth) / 2 + sprint.crosshair.location.x, (this.scaledHeight) / 2 + sprint.crosshair.location.y, sprint.crosshair.icon.x, 0, 4, 4);
+                }
+                RenderSystem.setShaderTexture(0, modIcons);
+                if (this.client.options.sneakKey.isPressed() && sneak.crosshair.enable) {
+                    this.drawTexture(matrices, (this.scaledWidth) / 2 + sneak.crosshair.location.x, (this.scaledHeight) / 2 + sneak.crosshair.location.y, sneak.crosshair.icon.x, 4, 4, 4);
+                }
+            }
         }
         RenderSystem.setShaderTexture(0, Screen.GUI_ICONS_TEXTURE);
+    }
+
+    @Shadow
+    private boolean shouldRenderSpectatorCrosshair(HitResult crosshairTarget) {
+        return false;
     }
 
     @Inject(method = "renderHotbar", at = @At("TAIL"))
     private void renderHotbar(float tickDelta, MatrixStack matrices, CallbackInfo ci) {
         assert this.getCameraPlayer() != null;
         PlayerEntity pl = this.getCameraPlayer();
+        assert pl != null;
         Arm arm = pl.getMainArm().getOpposite();
         int k = 28 * BooleanUtils.toInteger(!pl.getOffHandStack().isEmpty());
         RenderSystem.setShaderTexture(0, modIcons);
 
         if (this.client.options.sprintKey.isPressed() && sprint.hotbarEnabled) {
-            int x = (this.scaledWidth) / 2 - 113 -k;
+            int x = (this.scaledWidth) / 2 - 113 - k;
             if (arm == Arm.RIGHT) {
                 x = (this.scaledWidth) / 2 + 97 + k;
             }
