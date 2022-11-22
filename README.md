@@ -12,7 +12,3 @@ There are 3 different ways to display the sprint or sneak status :
 - As Text anywhere on the screen
 
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/M4M7DWJCH)
-test
-.:wq
-
-`
