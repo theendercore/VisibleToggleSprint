@@ -22,7 +22,7 @@ dependencies {
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 
-//	//dependence mods
+	//dependence mods
 	modImplementation "dev.isxander:yet-another-config-lib:${project.yacl}"
 
 	modImplementation "com.terraformersmc:modmenu:${project.mod_menu_version}"
@@ -54,9 +54,11 @@ publishing {
 	publications {
 		mavenJava(MavenPublication) {
 			from components.java
+			artifactId = jar.archiveBaseName
 		}
 	}
 
 	repositories {
+
 	}
 }

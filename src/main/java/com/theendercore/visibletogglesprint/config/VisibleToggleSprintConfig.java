@@ -26,8 +26,8 @@ public class VisibleToggleSprintConfig {
     public static final VisibleToggleSprintConfig INSTANCE = new VisibleToggleSprintConfig();
     public final Path configFile = FabricLoader.getInstance().getConfigDir().resolve("visible_toggle_sprint.json");
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-    public PlayerState sprint =  new PlayerState(true, new Vec2i(-6,-6), CrosshairIcons.DEFAULT, false,false, new Vec2i(10, 10), -1);
-    public PlayerState sneak =  new PlayerState(true, new Vec2i(1,1), CrosshairIcons.DEFAULT, false, false, new Vec2i(10, 30), -1);
+    public PlayerState sprint =  new PlayerState(true, new Vec2i(-6), CrosshairIcons.DEFAULT, false,false, new Vec2i(10), -1);
+    public PlayerState sneak =  new PlayerState(true, new Vec2i(1), CrosshairIcons.DEFAULT, false, false, new Vec2i(10, 30), -1);
     public void save() {
         try {
             Files.deleteIfExists(configFile);
@@ -69,213 +69,114 @@ public class VisibleToggleSprintConfig {
     public Screen makeScreen(Screen parent) {
         return YetAnotherConfigLib.createBuilder()
                 .title(Text.translatable("config."+MODID+".title"))
-                .category(ConfigCategory.createBuilder()
-                        .name(Text.translatable("config."+MODID+".sprint.tab"))
-                        .group(OptionGroup.createBuilder()
-                            .name(Text.translatable("config."+MODID+".group.crosshair"))
-                            .options(List.of(
-                                    Option.createBuilder(boolean.class)
-                                    .name(Text.translatable("config."+MODID+".enable"))
-                                    .binding(
-                                            true,
-                                            () -> sprint.crosshair.enable,
-                                            value -> sprint.crosshair.enable = value
-                                    )
-                                    .controller(BooleanController::new)
-                                    .build(),
-
-                                Option.createBuilder(int.class)
-                                    .name(Text.translatable("config."+MODID+".location.x"))
-                                    .binding(
-                                            -6,
-                                            () -> sprint.crosshair.location.x,
-                                            value -> sprint.crosshair.location.x = value
-                                    )
-                                    .controller(yacl -> new IntegerSliderController(yacl, -32, 32, 1))
-                                    .build(),
-
-                                Option.createBuilder(int.class)
-                                    .name(Text.translatable("config."+MODID+".location.y"))
-                                    .binding(
-                                            -6,
-                                            () -> sprint.crosshair.location.y,
-                                            value -> sprint.crosshair.location.y = value
-                                    )
-                                    .controller(yacl -> new IntegerSliderController(yacl, -32, 32, 1))
-                                    .build(),
-                                Option.createBuilder(CrosshairIcons.class)
-                                    .name(Text.translatable("config."+MODID+".icon"))
-                                    .binding(
-                                            CrosshairIcons.DEFAULT,
-                                            () -> sprint.crosshair.icon,
-                                            newValue -> sprint.crosshair.icon = newValue
-                                    )
-                                    .controller(EnumController::new)
-                                    .build()
-                                    )
-                            ).build())
-                        .group(OptionGroup.createBuilder()
-                                .name(Text.translatable("config."+MODID+".group.hotbar"))
-                                .option(Option.createBuilder(boolean.class)
-                                                .name(Text.translatable("config."+MODID+".enable"))
-                                                .binding(
-                                                        false,
-                                                        () -> sprint.hotbarEnabled,
-                                                        value -> sprint.hotbarEnabled = value
-                                                )
-                                                .controller(BooleanController::new)
-                                                .build()
-                                )
-                                .build())
-                        .group(OptionGroup.createBuilder()
-                                .name(Text.translatable("config."+MODID+".group.text")) //TEXT -------------------------------------------------------------------
-                                .options(
-                                        List.of(
-                                                Option.createBuilder(boolean.class)
-                                                        .name(Text.translatable("config."+MODID+".enable"))
-                                                        .binding(
-                                                                false,
-                                                                () -> sprint.text.enable,
-                                                                value -> sprint.text.enable = value
-                                                        )
-                                                        .controller(BooleanController::new)
-                                                        .build(),
-                                                Option.createBuilder(int.class)
-                                                        .name(Text.translatable("config."+MODID+".location.x"))
-                                                        .binding(
-                                                                10,
-                                                                () -> sprint.text.location.x,
-                                                                value -> sprint.text.location.x = value
-                                                        )
-                                                        .controller(yacl -> new IntegerSliderController(yacl, 0, 1920, 10))
-                                                        .build(),
-
-                                                Option.createBuilder(int.class)
-                                                        .name(Text.translatable("config."+MODID+".location.y"))
-                                                        .binding(
-                                                                10,
-                                                                () -> sprint.text.location.y,
-                                                                value -> sprint.text.location.y = value
-                                                        )
-                                                        .controller(yacl -> new IntegerSliderController(yacl, 0, 1080, 10))
-                                                        .build(),
-                                                Option.createBuilder(Color.class)
-                                                        .name(Text.translatable("config."+MODID+".color"))
-                                                        .binding(
-                                                                Color.WHITE,
-                                                                () -> new Color(sprint.text.color),
-                                                                value -> sprint.text.color = value.getRGB()
-                                                        )
-                                                        .controller(ColorController::new)
-                                                        .build()
-                                        )
-                                )
-                                .build())
-                    .build()
-                )
-                .category(ConfigCategory.createBuilder()
-                        .name(Text.translatable("config."+MODID+".sneak.tab"))
-                        .group(OptionGroup.createBuilder()
-                            .name(Text.translatable("config."+MODID+".group.crosshair"))
-                                .options(List.of(
-                            Option.createBuilder(boolean.class)
-                                    .name(Text.translatable("config."+MODID+".enable"))
-                                    .binding(
-                                            true,
-                                            () -> sneak.crosshair.enable,
-                                            value -> sneak.crosshair.enable = value
-                                    )
-                                    .controller(BooleanController::new)
-                                    .build(),
-                           Option.createBuilder(int.class)
-                                    .name(Text.translatable("config."+MODID+".location.x"))
-                                    .binding(
-                                            1,
-                                            () -> sneak.crosshair.location.x,
-                                            value -> sneak.crosshair.location.x = value
-                                    )
-                                    .controller(yacl -> new IntegerSliderController(yacl, -32, 32, 1))
-                                    .build(),
-                            Option.createBuilder(int.class)
-                                    .name(Text.translatable("config."+MODID+".location.y"))
-                                    .binding(
-                                            1,
-                                            () -> sneak.crosshair.location.y,
-                                            value -> sneak.crosshair.location.y = value
-                                    )
-                                    .controller(yacl -> new IntegerSliderController(yacl, -32, 32, 1))
-                                    .build(),
-                            Option.createBuilder(CrosshairIcons.class)
-                                    .name(Text.translatable("config."+MODID+".icon"))
-                                    .binding(
-                                            CrosshairIcons.DEFAULT,
-                                            () -> sneak.crosshair.icon,
-                                            newValue -> sneak.crosshair.icon = newValue
-                                    )
-                                    .controller(EnumController::new)
-                                    .build()
-                                ))
-                            .build())
-                        .group(OptionGroup.createBuilder()
-                                .name(Text.translatable("config."+MODID+".group.hotbar"))
-                                .option(Option.createBuilder(boolean.class)
-                                        .name(Text.translatable("config."+MODID+".enable"))
-                                        .binding(
-                                                false,
-                                                () -> sneak.hotbarEnabled,
-                                                value -> sneak.hotbarEnabled = value
-                                        )
-                                        .controller(BooleanController::new)
-                                        .build()
-                                )
-                                .build())
-                        .group(OptionGroup.createBuilder()
-                                .name(Text.translatable("config."+MODID+".group.text")) //TEXT -------------------------------------------------------------------
-                                .options(
-                                        List.of(
-                                            Option.createBuilder(boolean.class)
-                                                    .name(Text.translatable("config."+MODID+".enable"))
-                                                    .binding(
-                                                            false,
-                                                            () -> sneak.text.enable,
-                                                            value -> sneak.text.enable = value
-                                                    )
-                                                    .controller(BooleanController::new)
-                                                    .build(),
-                                            Option.createBuilder(int.class)
-                                                    .name(Text.translatable("config."+MODID+".location.x"))
-                                                    .binding(
-                                                            10,
-                                                            () -> sneak.text.location.x,
-                                                            value -> sneak.text.location.x = value
-                                                    )
-                                                    .controller(yacl -> new IntegerSliderController(yacl, 0, 1920, 10))
-                                                    .build(),
-
-                                            Option.createBuilder(int.class)
-                                                    .name(Text.translatable("config."+MODID+".location.y"))
-                                                    .binding(
-                                                            20,
-                                                            () -> sneak.text.location.y,
-                                                            value -> sneak.text.location.y = value
-                                                    )
-                                                    .controller(yacl -> new IntegerSliderController(yacl, 0, 1080, 10))
-                                                    .build(),
-                                                Option.createBuilder(Color.class)
-                                                        .name(Text.translatable("config."+MODID+".color"))
-                                                        .binding(
-                                                                Color.WHITE,
-                                                                () -> new Color(sneak.text.color),
-                                                                value -> sneak.text.color = value.getRGB()
-                                                        )
-                                                        .controller(ColorController::new)
-                                                        .build()
-                                        )
-                                )
-                                .build())
-                        .build())
+                .category(genOptions(sprint, "sprint"))
+                .category(genOptions(sneak, "sneak"))
                 .save(this::save)
                 .build()
                 .generateScreen(parent);
+    }
+
+    private ConfigCategory genOptions(PlayerState ps, String name){
+        return ConfigCategory.createBuilder()
+                .name(Text.translatable("config."+MODID+"."+name+".tab"))
+                .group(OptionGroup.createBuilder()
+                        .name(Text.translatable("config."+MODID+".group.crosshair"))
+                        .options(List.of(
+                                Option.createBuilder(boolean.class)
+                                        .name(Text.translatable("config."+MODID+".enable"))
+                                        .binding(
+                                                true,
+                                                () -> ps.crosshair.enable,
+                                                value -> ps.crosshair.enable = value
+                                        )
+                                        .controller(BooleanController::new)
+                                        .build(),
+                                Option.createBuilder(int.class)
+                                        .name(Text.translatable("config."+MODID+".location.x"))
+                                        .binding(
+                                                1,
+                                                () -> ps.crosshair.location.x,
+                                                value -> ps.crosshair.location.x = value
+                                        )
+                                        .controller(yacl -> new IntegerSliderController(yacl, -32, 32, 1))
+                                        .build(),
+                                Option.createBuilder(int.class)
+                                        .name(Text.translatable("config."+MODID+".location.y"))
+                                        .binding(
+                                                1,
+                                                () -> ps.crosshair.location.y,
+                                                value -> ps.crosshair.location.y = value
+                                        )
+                                        .controller(yacl -> new IntegerSliderController(yacl, -32, 32, 1))
+                                        .build(),
+                                Option.createBuilder(CrosshairIcons.class)
+                                        .name(Text.translatable("config."+MODID+".icon"))
+                                        .binding(
+                                                CrosshairIcons.DEFAULT,
+                                                () -> ps.crosshair.icon,
+                                                newValue -> ps.crosshair.icon = newValue
+                                        )
+                                        .controller(EnumController::new)
+                                        .build()
+                        ))
+                        .build())
+                .group(OptionGroup.createBuilder()
+                        .name(Text.translatable("config."+MODID+".group.hotbar"))
+                        .option(Option.createBuilder(boolean.class)
+                                .name(Text.translatable("config."+MODID+".enable"))
+                                .binding(
+                                        false,
+                                        () -> ps.hotbarEnabled,
+                                        value -> ps.hotbarEnabled = value
+                                )
+                                .controller(BooleanController::new)
+                                .build()
+                        )
+                        .build())
+                .group(OptionGroup.createBuilder()
+                        .name(Text.translatable("config."+MODID+".group.text"))
+                        .options(
+                                List.of(
+                                        Option.createBuilder(boolean.class)
+                                                .name(Text.translatable("config."+MODID+".enable"))
+                                                .binding(
+                                                        false,
+                                                        () -> ps.text.enable,
+                                                        value -> ps.text.enable = value
+                                                )
+                                                .controller(BooleanController::new)
+                                                .build(),
+                                        Option.createBuilder(int.class)
+                                                .name(Text.translatable("config."+MODID+".location.x"))
+                                                .binding(
+                                                        10,
+                                                        () -> ps.text.location.x,
+                                                        value -> ps.text.location.x = value
+                                                )
+                                                .controller(yacl -> new IntegerSliderController(yacl, 0, 1920, 10))
+                                                .build(),
+
+                                        Option.createBuilder(int.class)
+                                                .name(Text.translatable("config."+MODID+".location.y"))
+                                                .binding(
+                                                        20,
+                                                        () -> ps.text.location.y,
+                                                        value -> ps.text.location.y = value
+                                                )
+                                                .controller(yacl -> new IntegerSliderController(yacl, 0, 1080, 10))
+                                                .build(),
+                                        Option.createBuilder(Color.class)
+                                                .name(Text.translatable("config."+MODID+".color"))
+                                                .binding(
+                                                        Color.WHITE,
+                                                        () -> new Color(ps.text.color),
+                                                        value -> ps.text.color = value.getRGB()
+                                                )
+                                                .controller(ColorController::new)
+                                                .build()
+                                )
+                        )
+                        .build())
+                .build();
     }
 }

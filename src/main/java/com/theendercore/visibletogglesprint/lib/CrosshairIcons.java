@@ -7,6 +7,5 @@ public enum CrosshairIcons{
     MINIMAL_THREE(12, "MINIMAL_THREE");
     public final int x;
     public final String name;
-
     CrosshairIcons(int x, String name){ this.x = x; this.name = name;}
 }

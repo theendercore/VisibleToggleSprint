@@ -41,15 +41,14 @@ public abstract class InGameHud extends DrawableHelper {
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
     private void renderCrosshair(MatrixStack matrices, CallbackInfo ci) {
         RenderSystem.setShaderTexture(0, modIcons);
-        GameOptions gameOptions = this.client.options;
+        GameOptions gameOptions = client.options;
         if (!gameOptions.debugEnabled && gameOptions.getPerspective().isFirstPerson()) {
-            assert this.client.interactionManager != null;
-            if (this.client.interactionManager.getCurrentGameMode() != GameMode.SPECTATOR || this.shouldRenderSpectatorCrosshair(this.client.crosshairTarget)) {
-                if (this.client.options.sprintKey.isPressed() && sprint.crosshair.enable) {
+            if (client.interactionManager.getCurrentGameMode() != GameMode.SPECTATOR || this.shouldRenderSpectatorCrosshair(this.client.crosshairTarget)) {
+                if (gameOptions.sprintKey.isPressed() && sprint.crosshair.enable) {
                     this.drawTexture(matrices, (this.scaledWidth) / 2 + sprint.crosshair.location.x, (this.scaledHeight) / 2 + sprint.crosshair.location.y, sprint.crosshair.icon.x, 0, 4, 4);
                 }
                 RenderSystem.setShaderTexture(0, modIcons);
-                if (this.client.options.sneakKey.isPressed() && sneak.crosshair.enable) {
+                if (gameOptions.sneakKey.isPressed() && sneak.crosshair.enable) {
                     this.drawTexture(matrices, (this.scaledWidth) / 2 + sneak.crosshair.location.x, (this.scaledHeight) / 2 + sneak.crosshair.location.y, sneak.crosshair.icon.x, 4, 4, 4);
                 }
             }
@@ -64,9 +63,7 @@ public abstract class InGameHud extends DrawableHelper {
 
     @Inject(method = "renderHotbar", at = @At("TAIL"))
     private void renderHotbar(float tickDelta, MatrixStack matrices, CallbackInfo ci) {
-        assert this.getCameraPlayer() != null;
         PlayerEntity pl = this.getCameraPlayer();
-        assert pl != null;
         Arm arm = pl.getMainArm().getOpposite();
         int k = 28 * BooleanUtils.toInteger(!pl.getOffHandStack().isEmpty());
         RenderSystem.setShaderTexture(0, modIcons);
