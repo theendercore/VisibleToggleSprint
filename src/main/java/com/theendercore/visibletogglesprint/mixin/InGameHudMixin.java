@@ -4,25 +4,23 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.theendercore.visibletogglesprint.lib.PlayerState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.option.GameOptions;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
-import net.minecraft.util.Arm;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.world.GameMode;
-import org.apache.commons.lang3.BooleanUtils;
 import org.spongepowered.asm.mixin.*;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import static com.theendercore.visibletogglesprint.VisibleToggleSprint.*;
 
-@Mixin(net.minecraft.client.gui.hud.InGameHud.class)
-public abstract class InGameHud extends DrawableHelper {
-    private final Identifier modIcons = new Identifier(MODID, "textures/gui/icons.png");
+@Mixin(InGameHud.class)
+public abstract class InGameHudMixin extends DrawableHelper {
+    private final Identifier MOD_ICONS = new Identifier(MODID, "textures/gui/icons.png");
     PlayerState sprint = getConfig().sprint;
     PlayerState sneak = getConfig().sneak;
     @Final
@@ -33,21 +31,17 @@ public abstract class InGameHud extends DrawableHelper {
     @Shadow
     private int scaledHeight;
 
-    @Shadow
-    private PlayerEntity getCameraPlayer() {
-        return null;
-    }
-
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
     private void renderCrosshair(MatrixStack matrices, CallbackInfo ci) {
-        RenderSystem.setShaderTexture(0, modIcons);
+        RenderSystem.setShaderTexture(0, MOD_ICONS);
         GameOptions gameOptions = client.options;
         if (!gameOptions.debugEnabled && gameOptions.getPerspective().isFirstPerson()) {
+            assert client.interactionManager != null;
             if (client.interactionManager.getCurrentGameMode() != GameMode.SPECTATOR || this.shouldRenderSpectatorCrosshair(this.client.crosshairTarget)) {
                 if (gameOptions.sprintKey.isPressed() && sprint.crosshair.enable) {
                     this.drawTexture(matrices, (this.scaledWidth) / 2 + sprint.crosshair.location.x, (this.scaledHeight) / 2 + sprint.crosshair.location.y, sprint.crosshair.icon.x, 0, 4, 4);
                 }
-                RenderSystem.setShaderTexture(0, modIcons);
+                RenderSystem.setShaderTexture(0, MOD_ICONS);
                 if (gameOptions.sneakKey.isPressed() && sneak.crosshair.enable) {
                     this.drawTexture(matrices, (this.scaledWidth) / 2 + sneak.crosshair.location.x, (this.scaledHeight) / 2 + sneak.crosshair.location.y, sneak.crosshair.icon.x, 4, 4, 4);
                 }
@@ -63,26 +57,16 @@ public abstract class InGameHud extends DrawableHelper {
 
     @Inject(method = "renderHotbar", at = @At("TAIL"))
     private void renderHotbar(float tickDelta, MatrixStack matrices, CallbackInfo ci) {
-        PlayerEntity pl = this.getCameraPlayer();
-        Arm arm = pl.getMainArm().getOpposite();
-        int k = 28 * BooleanUtils.toInteger(!pl.getOffHandStack().isEmpty());
-        RenderSystem.setShaderTexture(0, modIcons);
+        RenderSystem.setShaderTexture(0, MOD_ICONS);
 
-        if (this.client.options.sprintKey.isPressed() && sprint.hotbarEnabled) {
-            int x = (this.scaledWidth) / 2 - 113 - k;
-            if (arm == Arm.RIGHT) {
-                x = (this.scaledWidth) / 2 + 97 + k;
-            }
-            this.drawTexture(matrices, x, (this.scaledHeight) - 18, 0, 16, 16, 16);
-
+        if (this.client.options.sprintKey.isPressed() && sprint.hotbar.enable) {
+            int x = (this.scaledWidth / 2) + sprint.hotbar.location.x;
+            this.drawTexture(matrices, x, (this.scaledHeight) - sprint.hotbar.location.y, 0, 16, 16, 16);
         }
-        if (this.client.options.sneakKey.isPressed() && sneak.hotbarEnabled) {
-            int l = 22 * BooleanUtils.toInteger(this.client.options.sprintKey.isPressed() && sprint.hotbarEnabled);
-            int x = (this.scaledWidth) / 2 - 113 - l - k;
-            if (arm == Arm.RIGHT) {
-                x = (this.scaledWidth) / 2 + 97 + l + k;
-            }
-            this.drawTexture(matrices, x, (this.scaledHeight) - 18, 16, 16, 16, 16);
+
+        if (this.client.options.sneakKey.isPressed() && sneak.hotbar.enable) {
+            int x = (this.scaledWidth / 2) + sneak.hotbar.location.x;
+            this.drawTexture(matrices, x, (this.scaledHeight) - sneak.hotbar.location.y, 16, 16, 16, 16);
         }
     }
 

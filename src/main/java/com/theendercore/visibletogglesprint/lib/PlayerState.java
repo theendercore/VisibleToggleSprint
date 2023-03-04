@@ -2,36 +2,38 @@ package com.theendercore.visibletogglesprint.lib;
 
 public class PlayerState {
     public Crosshair crosshair;
-    public boolean hotbarEnabled;
+    public Hotbar hotbar;
     public TextState text;
 
-    public PlayerState(boolean enableCross, Vec2i locationCross, CrosshairIcons icon, boolean hotbarEnabled, boolean enableText, Vec2i locationText, int colorText) {
+    public PlayerState(boolean enableCross, Vec2i locationCross, CrosshairIcons icon, boolean enableHotbar, Vec2i locationHotbar, boolean enableText, Vec2i locationText, int colorText) {
         this.crosshair = new Crosshair(enableCross, locationCross, icon);
-        this.hotbarEnabled = hotbarEnabled;
+        this.hotbar = new Hotbar(enableHotbar, locationHotbar);
         this.text = new TextState(enableText, locationText, colorText);
     }
 
-    public static class Crosshair {
-        public boolean enable;
-        public Vec2i location;
+
+    public static class Crosshair extends IState {
         public CrosshairIcons icon;
 
         public Crosshair(boolean e, Vec2i l, CrosshairIcons i) {
-            this.enable = e;
-            this.location = l;
+            super(e, l);
             this.icon = i;
         }
     }
 
-    public static class TextState {
-        public boolean enable;
-        public Vec2i location;
+    public static class Hotbar extends IState {
+        public Hotbar(boolean e, Vec2i l) {
+            super(e, l);
+        }
+    }
+
+    public static class TextState extends IState {
         public int color;
 
         TextState(boolean e, Vec2i l, int c) {
-            this.enable = e;
-            this.location = l;
+            super(e, l);
             this.color = c;
         }
     }
 }
+
