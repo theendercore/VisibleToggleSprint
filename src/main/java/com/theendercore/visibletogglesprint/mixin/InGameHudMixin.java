@@ -1,5 +1,6 @@
 package com.theendercore.visibletogglesprint.mixin;
 
+import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.theendercore.visibletogglesprint.lib.PlayerState;
 import net.minecraft.client.MinecraftClient;
@@ -33,21 +34,24 @@ public abstract class InGameHudMixin extends DrawableHelper {
 
     @Inject(method = "renderCrosshair", at = @At("TAIL"))
     private void renderCrosshair(MatrixStack matrices, CallbackInfo ci) {
+
+        RenderSystem.blendFuncSeparate(GlStateManager.SrcFactor.ONE_MINUS_DST_COLOR, GlStateManager.DstFactor.ONE_MINUS_SRC_COLOR, GlStateManager.SrcFactor.ONE, GlStateManager.DstFactor.ZERO);
         RenderSystem.setShaderTexture(0, MOD_ICONS);
         GameOptions gameOptions = client.options;
         if (!gameOptions.debugEnabled && gameOptions.getPerspective().isFirstPerson()) {
             assert client.interactionManager != null;
             if (client.interactionManager.getCurrentGameMode() != GameMode.SPECTATOR || this.shouldRenderSpectatorCrosshair(this.client.crosshairTarget)) {
                 if (gameOptions.sprintKey.isPressed() && sprint.crosshair.enable) {
-                    this.drawTexture(matrices, (this.scaledWidth) / 2 + sprint.crosshair.location.x, (this.scaledHeight) / 2 + sprint.crosshair.location.y, sprint.crosshair.icon.x, 0, 4, 4);
+                    drawTexture(matrices, (this.scaledWidth) / 2 + sprint.crosshair.location.x, (this.scaledHeight) / 2 + sprint.crosshair.location.y, sprint.crosshair.icon.x, 0, 4, 4);
                 }
                 RenderSystem.setShaderTexture(0, MOD_ICONS);
                 if (gameOptions.sneakKey.isPressed() && sneak.crosshair.enable) {
-                    this.drawTexture(matrices, (this.scaledWidth) / 2 + sneak.crosshair.location.x, (this.scaledHeight) / 2 + sneak.crosshair.location.y, sneak.crosshair.icon.x, 4, 4, 4);
+                    drawTexture(matrices, (this.scaledWidth) / 2 + sneak.crosshair.location.x, (this.scaledHeight) / 2 + sneak.crosshair.location.y, sneak.crosshair.icon.x, 4, 4, 4);
                 }
             }
         }
         RenderSystem.setShaderTexture(0, Screen.GUI_ICONS_TEXTURE);
+        RenderSystem.defaultBlendFunc();
     }
 
     @Shadow
@@ -61,12 +65,12 @@ public abstract class InGameHudMixin extends DrawableHelper {
 
         if (this.client.options.sprintKey.isPressed() && sprint.hotbar.enable) {
             int x = (this.scaledWidth / 2) + sprint.hotbar.location.x;
-            this.drawTexture(matrices, x, (this.scaledHeight) - sprint.hotbar.location.y, 0, 16, 16, 16);
+            drawTexture(matrices, x, (this.scaledHeight) - sprint.hotbar.location.y, 0, 16, 16, 16);
         }
 
         if (this.client.options.sneakKey.isPressed() && sneak.hotbar.enable) {
             int x = (this.scaledWidth / 2) + sneak.hotbar.location.x;
-            this.drawTexture(matrices, x, (this.scaledHeight) - sneak.hotbar.location.y, 16, 16, 16, 16);
+            drawTexture(matrices, x, (this.scaledHeight) - sneak.hotbar.location.y, 16, 16, 16, 16);
         }
     }
 
